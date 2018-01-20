@@ -1,9 +1,8 @@
-package com.io7m.aerontest;
+package com.io7m.aerontest0;
 
 import io.aeron.Aeron;
 import io.aeron.ChannelUriStringBuilder;
 import io.aeron.ConcurrentPublication;
-import io.aeron.ExclusivePublication;
 import io.aeron.Publication;
 import io.aeron.driver.MediaDriver;
 import io.aeron.logbuffer.FrameDescriptor;
@@ -60,11 +59,11 @@ public final class Server
             LOG.debug("adding publication {}", uri_unreliable);
 
             try (ConcurrentPublication pub_reliable =
-                   aeron.addPublication(uri_reliable, 0)) {
+                   aeron.addPublication(uri_reliable, 104729)) {
               LOG.debug("added publication {}", uri_reliable);
 
               try (ConcurrentPublication pub_unreliable =
-                     aeron.addPublication(uri_unreliable, 1)) {
+                     aeron.addPublication(uri_unreliable, 104723)) {
                 LOG.debug("added publication {}", uri_unreliable);
 
                 int index = 0;
@@ -73,7 +72,10 @@ public final class Server
                     {
                       final byte[] value = ("U " + index).getBytes(UTF_8);
                       buffer.putBytes(0, value);
-                      final long result = pub_unreliable.offer(buffer, 0, value.length);
+                      final long result = pub_unreliable.offer(
+                        buffer,
+                        0,
+                        value.length);
                       LOG.debug("result: {}", resultText(result));
                       ++index;
                     }
@@ -81,7 +83,10 @@ public final class Server
                     {
                       final byte[] value = ("R " + index).getBytes(UTF_8);
                       buffer.putBytes(0, value);
-                      final long result = pub_reliable.offer(buffer, 0, value.length);
+                      final long result = pub_reliable.offer(
+                        buffer,
+                        0,
+                        value.length);
                       LOG.debug("result: {}", resultText(result));
                       ++index;
                     }
@@ -105,7 +110,7 @@ public final class Server
   {
     if (result < 0L) {
       if (result == Publication.BACK_PRESSURED) {
-       return "BACK_PRESSURED";
+        return "BACK_PRESSURED";
       }
       if (result == Publication.NOT_CONNECTED) {
         return "NOT_CONNECTED";

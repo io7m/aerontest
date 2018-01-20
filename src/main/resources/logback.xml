@@ -5,7 +5,7 @@
     name="STDERR"
     class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%level %logger{128}: %msg%n</pattern>
+      <pattern>%level [%thread] %logger{128}: %msg%n</pattern>
     </encoder>
     <target>System.err</target>
   </appender>

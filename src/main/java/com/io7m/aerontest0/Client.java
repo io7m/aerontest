@@ -1,4 +1,4 @@
-package com.io7m.aerontest;
+package com.io7m.aerontest0;
 
 import io.aeron.Aeron;
 import io.aeron.ChannelUriStringBuilder;
@@ -61,10 +61,10 @@ public final class Client
             LOG.debug("adding subscription {}", uri_unreliable);
 
             try (Subscription sub_reliable =
-                   aeron.addSubscription(uri_reliable, 0)) {
+                   aeron.addSubscription(uri_reliable, 104729)) {
               LOG.debug("subscribed {}", uri_reliable);
               try (Subscription sub_unreliable =
-                     aeron.addSubscription(uri_unreliable, 1)) {
+                     aeron.addSubscription(uri_unreliable, 104723)) {
                 LOG.debug("subscribed {}", uri_unreliable);
 
                 int wait = 10;

@@ -16,12 +16,12 @@
   <version>0.0.1</version>
 
   <packaging>jar</packaging>
-  <name>com.io7m.aerontest</name>
+  <name>com.io7m.aerontest0</name>
   <description>Aeron experimentation</description>
   <url>http://github.com/io7m/aerontest</url>
 
   <properties>
-    <io7m.checkstyle.artifact>com.io7m.aerontest.checkstyle</io7m.checkstyle.artifact>
+    <io7m.checkstyle.artifact>com.io7m.aerontest0.checkstyle</io7m.checkstyle.artifact>
     <io7m.checkstyle.path>/com/io7m/aerontest/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>0.0.1</io7m.api.previousVersion>
 
@@ -91,6 +91,11 @@
     </dependency>
     <dependency>
       <groupId>io.aeron</groupId>
+      <artifactId>aeron-archive</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.aeron</groupId>
       <artifactId>aeron-driver</artifactId>
       <version>1.7.0</version>
     </dependency>
@@ -98,6 +103,11 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
+      <version>${io7m.org.immutables.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
