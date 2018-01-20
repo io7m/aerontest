@@ -62,10 +62,10 @@ public final class Client
 
             try (Subscription sub_reliable =
                    aeron.addSubscription(uri_reliable, 0)) {
-              LOG.debug("subscribed reliable");
+              LOG.debug("subscribed {}", uri_reliable);
               try (Subscription sub_unreliable =
                      aeron.addSubscription(uri_unreliable, 1)) {
-                LOG.debug("subscribed unreliable");
+                LOG.debug("subscribed {}", uri_unreliable);
 
                 int wait = 10;
                 while (!sub_reliable.isConnected() && wait >= 0) {

@@ -61,9 +61,11 @@ public final class Server
 
             try (ConcurrentPublication pub_reliable =
                    aeron.addPublication(uri_reliable, 0)) {
+              LOG.debug("added publication {}", uri_reliable);
+
               try (ConcurrentPublication pub_unreliable =
                      aeron.addPublication(uri_unreliable, 1)) {
-                LOG.debug("added publications");
+                LOG.debug("added publication {}", uri_unreliable);
 
                 int index = 0;
                 while (true) {
