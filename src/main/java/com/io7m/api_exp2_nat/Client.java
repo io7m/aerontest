@@ -101,6 +101,13 @@ final class Client extends Thread
   {
     this.log.debug("start");
 
+    /*
+     * Create a subscription to read data from the server. This uses
+     * dynamic MDC to will send messages to the server's control port, and
+     * the server will react by data to the local address and port combination
+     * specified here.
+     */
+
     final String sub_uri =
       new ChannelUriStringBuilder()
         .mtu(Shared.MTU)
@@ -117,6 +124,10 @@ final class Client extends Thread
         Shared.STREAM_ID,
         this::onImageAvailable,
         this::onImageUnavailable);
+
+    /*
+     * Create a publication for sending data to the server.
+     */
 
     final String pub_uri =
       new ChannelUriStringBuilder()
