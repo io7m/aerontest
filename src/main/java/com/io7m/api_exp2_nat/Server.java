@@ -37,7 +37,6 @@ final class Server extends Thread
     final int data_port)
   {
     super("server");
-    this.setDaemon(false);
 
     this.log = LoggerFactory.getLogger("Server");
 
