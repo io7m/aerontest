@@ -26,10 +26,11 @@ final class Parser implements FragmentHandler
     final byte[] buf = new byte[length];
     buffer.getBytes(offset, buf);
 
-    this.log.debug("received: [session 0x{}] [stream 0x{}] [term 0x{}] {}",
-                   String.format("%8x", Integer.valueOf(header.sessionId())),
-                   String.format("%8x", Integer.valueOf(header.streamId())),
-                   String.format("%8x", Integer.valueOf(header.termId())),
-                   new String(buf, UTF_8));
+    this.log.debug(
+      "received: [session 0x{}] [stream 0x{}] [term 0x{}] {}",
+      String.format("%8x", Integer.valueOf(header.sessionId())),
+      String.format("%8x", Integer.valueOf(header.streamId())),
+      String.format("%8x", Integer.valueOf(header.termId())),
+      new String(buf, UTF_8));
   }
 }

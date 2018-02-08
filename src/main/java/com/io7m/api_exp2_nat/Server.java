@@ -9,7 +9,6 @@ import io.aeron.FragmentAssembler;
 import io.aeron.Image;
 import io.aeron.Subscription;
 import io.aeron.driver.MediaDriver;
-import io.aeron.logbuffer.FrameDescriptor;
 import org.agrona.BufferUtil;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.slf4j.Logger;
@@ -65,6 +64,30 @@ final class Server extends Thread
       new FragmentAssembler(new Parser(this.log));
   }
 
+  private static String serverMessage()
+  {
+    return new StringBuilder(128)
+      .append("Server HELLO: ")
+      .append(LocalDateTime.now().format(ISO_LOCAL_DATE_TIME))
+      .toString();
+  }
+
+  public static void main(final String[] args)
+  {
+    final Args jargs = new Args();
+    JCommander.newBuilder()
+      .addObject(jargs)
+      .build()
+      .parse(args);
+
+    final Server s =
+      new Server(
+        jargs.address,
+        jargs.control_port,
+        jargs.data_port);
+    s.start();
+  }
+
   @Override
   public void run()
   {
@@ -72,7 +95,7 @@ final class Server extends Thread
 
     final String pub_uri =
       new ChannelUriStringBuilder()
-        .mtu(Integer.valueOf(FrameDescriptor.FRAME_ALIGNMENT * 38))
+        .mtu(Shared.MTU)
         .reliable(Boolean.TRUE)
         .media("udp")
         .controlMode("dynamic")
@@ -80,11 +103,11 @@ final class Server extends Thread
         .build();
 
     final ExclusivePublication pub =
-      this.aeron.addExclusivePublication(pub_uri, 0xcafe0000);
+      this.aeron.addExclusivePublication(pub_uri, Shared.STREAM_ID);
 
     final String sub_uri =
       new ChannelUriStringBuilder()
-        .mtu(Integer.valueOf(FrameDescriptor.FRAME_ALIGNMENT * 38))
+        .mtu(Shared.MTU)
         .reliable(Boolean.TRUE)
         .media("udp")
         .endpoint(this.local_address + ":" + this.local_data_port)
@@ -93,12 +116,11 @@ final class Server extends Thread
     final Subscription sub =
       this.aeron.addSubscription(
         sub_uri,
-        0xcafe0000,
+        Shared.STREAM_ID,
         this::onImageAvailable,
         this::onImageUnavailable);
 
     while (true) {
-
       this.log.trace("pub connected: {}", Boolean.valueOf(pub.isConnected()));
       if (pub.isConnected()) {
         Utilities.send(this.log, pub, this.buffer, serverMessage());
@@ -117,22 +139,20 @@ final class Server extends Thread
     }
   }
 
-  private static String serverMessage()
-  {
-    return new StringBuilder(128)
-      .append("Server HELLO: ")
-      .append(LocalDateTime.now().format(ISO_LOCAL_DATE_TIME))
-      .toString();
-  }
-
   private void onImageUnavailable(final Image image)
   {
-    this.log.debug("onImageUnavailable: {}", image.sourceIdentity());
+    this.log.debug(
+      "onImageUnavailable: [0x{}] {}",
+      String.format("%08x", Integer.valueOf(image.sessionId())),
+      image.sourceIdentity());
   }
 
   private void onImageAvailable(final Image image)
   {
-    this.log.debug("onImageAvailable: {}", image.sourceIdentity());
+    this.log.debug(
+      "onImageAvailable: [0x{}] {}",
+      String.format("%08x", Integer.valueOf(image.sessionId())),
+      image.sourceIdentity());
   }
 
   private static final class Args
@@ -154,21 +174,5 @@ final class Server extends Thread
       description = "Local data port",
       required = false)
     private int data_port = 9001;
-  }
-
-  public static void main(final String[] args)
-  {
-    final Args jargs = new Args();
-    JCommander.newBuilder()
-      .addObject(jargs)
-      .build()
-      .parse(args);
-
-    final Server s =
-      new Server(
-        jargs.address,
-        jargs.control_port,
-        jargs.data_port);
-    s.start();
   }
 }
