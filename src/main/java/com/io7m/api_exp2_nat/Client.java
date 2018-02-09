@@ -118,6 +118,8 @@ final class Client extends Thread
         .controlMode("dynamic")
         .build();
 
+    this.log.debug("opening data subscription: {}", sub_uri);
+
     final Subscription sub =
       this.aeron.addSubscription(
         sub_uri,
@@ -136,6 +138,8 @@ final class Client extends Thread
         .media("udp")
         .endpoint(this.server_address + ":" + this.server_data_port)
         .build();
+
+    this.log.debug("opening data publication: {}", pub_uri);
 
     final ExclusivePublication pub =
       this.aeron.addExclusivePublication(pub_uri, Shared.STREAM_ID);

@@ -97,9 +97,10 @@ final class Server extends Thread
         .mtu(Shared.MTU)
         .reliable(Boolean.TRUE)
         .media("udp")
-        .controlMode("dynamic")
         .controlEndpoint(this.local_address + ":" + this.local_control_port)
         .build();
+
+    this.log.debug("opening control publication: {}", pub_uri);
 
     final ExclusivePublication pub =
       this.aeron.addExclusivePublication(pub_uri, Shared.STREAM_ID);
@@ -111,6 +112,8 @@ final class Server extends Thread
         .media("udp")
         .endpoint(this.local_address + ":" + this.local_data_port)
         .build();
+
+    this.log.debug("opening data subscription: {}", sub_uri);
 
     final Subscription sub =
       this.aeron.addSubscription(
