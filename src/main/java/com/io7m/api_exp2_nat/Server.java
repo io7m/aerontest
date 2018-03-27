@@ -232,7 +232,6 @@ final class Server extends Thread
         .mtu(Shared.MTU)
         .reliable(Boolean.TRUE)
         .media("udp")
-        .sessionId(session)
         .controlEndpoint(this.local_address + ":" + this.local_control_port)
         .build();
 

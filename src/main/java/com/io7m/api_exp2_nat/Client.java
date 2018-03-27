@@ -107,10 +107,6 @@ final class Client extends Thread
      * dynamic MDC to send messages to the server's control port, and
      * the server will react by sending data to the local address and port
      * combination specified here.
-     *
-     * Additionally, select a session ID that the server will use to refer to
-     * this client. For the sake of this example, the integer ID of the local
-     * port is used, but in practice this should be something else.
      */
 
     final String sub_uri =
@@ -121,7 +117,6 @@ final class Client extends Thread
         .endpoint(this.local_address + ":" + this.local_port)
         .controlEndpoint(this.server_address + ":" + this.server_control_port)
         .controlMode("dynamic")
-        .sessionId(Integer.valueOf(this.local_port))
         .build();
 
     this.log.debug("opening data subscription: {}", sub_uri);
@@ -143,7 +138,6 @@ final class Client extends Thread
         .reliable(Boolean.TRUE)
         .media("udp")
         .endpoint(this.server_address + ":" + this.server_data_port)
-        .sessionId(Integer.valueOf(this.local_port))
         .build();
 
     this.log.debug("opening data publication: {}", pub_uri);
