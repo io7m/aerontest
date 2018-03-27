@@ -54,13 +54,14 @@ final class Client extends Thread
     this.media_context =
       new MediaDriver.Context()
         .dirDeleteOnStart(true)
-        .aeronDirectoryName("/dev/shm/aeron-client-" + local_port);
+        .aeronDirectoryName("/tmp/aeron-client-" + local_port);
+
     this.media =
       MediaDriver.launch(this.media_context);
 
     this.aeron_context =
       new Aeron.Context()
-        .aeronDirectoryName("/dev/shm/aeron-client-" + local_port);
+        .aeronDirectoryName("/tmp/aeron-client-" + local_port);
     this.aeron =
       Aeron.connect(this.aeron_context);
 
@@ -103,9 +104,9 @@ final class Client extends Thread
 
     /*
      * Create a subscription to read data from the server. This uses
-     * dynamic MDC to will send messages to the server's control port, and
-     * the server will react by data to the local address and port combination
-     * specified here.
+     * dynamic MDC to send messages to the server's control port, and
+     * the server will react by sending data to the local address and port
+     * combination specified here.
      */
 
     final String sub_uri =
@@ -144,6 +145,11 @@ final class Client extends Thread
     final ExclusivePublication pub =
       this.aeron.addExclusivePublication(pub_uri, Shared.STREAM_ID);
 
+    /*
+     * Go into a loop, reading messages from and sending messages to the
+     * server every two seconds.
+     */
+
     while (true) {
       this.log.trace("sub connected: {}", Boolean.valueOf(sub.isConnected()));
       if (sub.isConnected()) {
@@ -156,7 +162,7 @@ final class Client extends Thread
       }
 
       try {
-        Thread.sleep(2000L);
+        Thread.sleep(1000L);
       } catch (final InterruptedException e) {
         Thread.currentThread().interrupt();
       }

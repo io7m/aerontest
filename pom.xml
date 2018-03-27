@@ -87,17 +87,17 @@
     <dependency>
       <groupId>io.aeron</groupId>
       <artifactId>aeron-client</artifactId>
-      <version>1.7.0</version>
+      <version>1.8.2</version>
     </dependency>
     <dependency>
       <groupId>io.aeron</groupId>
       <artifactId>aeron-archive</artifactId>
-      <version>1.7.0</version>
+      <version>1.8.2</version>
     </dependency>
     <dependency>
       <groupId>io.aeron</groupId>
       <artifactId>aeron-driver</artifactId>
-      <version>1.7.0</version>
+      <version>1.8.2</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -108,11 +108,6 @@
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>
       <version>1.72</version>
-    </dependency>
-    <dependency>
-      <groupId>org.immutables</groupId>
-      <artifactId>value</artifactId>
-      <version>${io7m.org.immutables.version}</version>
     </dependency>
   </dependencies>
 
@@ -127,14 +122,6 @@
             <source>9</source>
             <target>9</target>
             <release>9</release>
-
-            <annotationProcessorPaths>
-              <dependency>
-                <groupId>org.immutables</groupId>
-                <artifactId>value</artifactId>
-                <version>${io7m.org.immutables.version}</version>
-              </dependency>
-            </annotationProcessorPaths>
           </configuration>
         </plugin>
       </plugins>
